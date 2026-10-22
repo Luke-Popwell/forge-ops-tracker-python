@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "forge-ops-tracker"
+version = "0.20.0"
+description = "ForgeOps error tracking client: captures unhandled exceptions (Django/Flask middleware, plus explicit capture anywhere else) and delivers them to ForgeOps over HTTP."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = [ "LICENSE.txt" ]
+authors = [ { name = "ForgeOps" } ]
+dependencies = []
+# No "License :: OSI Approved :: MIT License" classifier: superseded by the license = "MIT"
+# SPDX expression above (PEP 639); setuptools now rejects having both.
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: System :: Logging",
+    "Framework :: Django",
+    "Framework :: Flask",
+]
+
+# Source is the public read-only mirror of this directory (see script/release_sdks_lib/mirror.rb).
+[project.urls]
+Homepage = "https://getforgeops.net"
+Source = "https://github.com/Luke-Popwell/forge-ops-tracker-python"
+
+[project.optional-dependencies]
+django = ["django>=4.2"]
+flask = ["flask>=2.3"]
+celery = ["celery>=5.3"]
+sqlalchemy = ["sqlalchemy>=2.0"]
+requests = ["requests>=2.31"]
+redis = ["redis>=4.5"]
+test = ["pytest>=8", "pytest-django>=4.8", "flask>=2.3", "flask-login>=0.6", "django>=4.2", "celery>=5.3", "sqlalchemy>=2.0", "requests>=2.31", "redis>=4.5", "fakeredis>=2.20"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.django_settings"
+testpaths = ["tests"]

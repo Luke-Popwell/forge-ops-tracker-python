@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "forge-ops-tracker"
-version = "0.20.0"
+version = "0.20.1"
 description = "ForgeOps error tracking client: captures unhandled exceptions (Django/Flask middleware, plus explicit capture anywhere else) and delivers them to ForgeOps over HTTP."
 readme = "README.md"
 requires-python = ">=3.9"

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.20.1 (2026-10-22)
+
+- Strict privacy now also turns off slow query plans (`explain_slow_queries`): no EXPLAIN is run and no
+  plan is sent, since a plan carries the SQL. Before, a plan could still be sent, with its values masked.
+- The README says what strict privacy does in its opening lines.
+- The source is public at https://github.com/Luke-Popwell/forge-ops-tracker-python, and the package links to it.
+
 ## 0.20.0 (2026-10-20)
 
 - Strict privacy: a raw request path now keeps only its first segment, and the rest is sent as

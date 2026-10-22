@@ -191,6 +191,15 @@ def test_explain_is_off_by_default(monkeypatch):
     assert calls == []
 
 
+def test_explain_does_nothing_under_strict_privacy(monkeypatch):
+    configuration, _ = _init(monkeypatch, explain_slow_queries=True, strict_privacy=True)
+    planner, _ = _planner(configuration)
+    calls = []
+
+    assert not planner.consider(SLOW_SELECT, "postgresql", 5000, lambda: calls.append(1))
+    assert calls == []
+
+
 def test_explain_skips_queries_under_the_threshold_other_databases_and_non_selects(monkeypatch):
     configuration, _ = _init(monkeypatch, explain_slow_queries=True, explain_threshold_ms=500)
     planner, _ = _planner(configuration)

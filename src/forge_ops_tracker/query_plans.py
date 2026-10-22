@@ -163,7 +163,8 @@ class QueryPlanner:
         raises."""
         try:
             configuration = self._configuration
-            if not (configuration.explain_slow_queries and configuration.is_enabled()):
+            # Strict privacy sends no SQL at all, masked or not (sdks/STRICT_PRIVACY.md).
+            if not (configuration.explain_slow_queries and configuration.is_enabled()) or configuration.strict_privacy:
                 return False
             if db_system != "postgresql" or duration_ms < configuration.explain_threshold_ms:
                 return False

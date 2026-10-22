@@ -20,6 +20,11 @@ FINGERPRINT_LENGTH = 32
 # own idea of a word (Unicode letters, digits in other scripts) never changes the result. re.ASCII
 # too, though every class here is spelled out explicitly anyway.
 _WORD = "A-Za-z0-9_"
+_EMAIL = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", re.ASCII)
+# A quoted value (KeyError: 'Jane Doe') is data, not the shape of the error. Single quotes only open
+# and close at a word boundary, so a contraction (Couldn't) or the `email' style never starts one.
+_DOUBLE_QUOTED = re.compile(r'"[^"\r\n]*"', re.ASCII)
+_SINGLE_QUOTED = re.compile(rf"(?<![{_WORD}])'[^'\r\n]*'(?![{_WORD}])", re.ASCII)
 _HEX_OBJECT_ID = re.compile(r"0x[0-9a-fA-F]{4,}", re.ASCII)
 _UUID = re.compile(
     rf"(?<![{_WORD}])[0-9a-fA-F]{{8}}-[0-9a-fA-F]{{4}}-[0-9a-fA-F]{{4}}-[0-9a-fA-F]{{4}}-[0-9a-fA-F]{{12}}(?![{_WORD}])",
@@ -40,8 +45,12 @@ _SOURCE_CONTEXT_FIELDS = ("context_line", "pre_context", "post_context")
 
 
 def normalize_message(message):
-    """The message with hex object ids, UUIDs and standalone numbers replaced, in that order."""
+    """The message with emails, quoted values, hex object ids, UUIDs and standalone numbers replaced,
+    in that order."""
     text = "" if message is None else str(message)
+    text = _EMAIL.sub("<email>", text)
+    text = _DOUBLE_QUOTED.sub("<str>", text)
+    text = _SINGLE_QUOTED.sub("<str>", text)
     text = _HEX_OBJECT_ID.sub("0x", text)
     text = _UUID.sub("<uuid>", text)
     return _NUMBER.sub("<n>", text)

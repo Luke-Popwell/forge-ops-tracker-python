@@ -1,4 +1,28 @@
+import json
+import os
+
+import pytest
+
 from forge_ops_tracker import pii_scrubber
+
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+# A byte-identical copy of sdks/pii_scrubbing_vectors.json, generated from the server's own
+# app/services/pii_scrubber.rb: card numbers, IBANs and bank-detail keys, as sdks/PII_SCRUBBING.md
+# describes them.
+with open(os.path.join(THIS_DIR, "fixtures", "pii_scrubbing_vectors.json"), encoding="utf-8") as vectors_file:
+    VECTORS = json.load(vectors_file)
+
+
+@pytest.mark.parametrize("vector", VECTORS["strings"], ids=lambda vector: vector["input"])
+def test_scrubs_every_string_vector_exactly_as_the_server_does(vector):
+    assert pii_scrubber.scrub(vector["input"]) == vector["scrubbed"]
+
+
+@pytest.mark.parametrize("vector", VECTORS["keys"], ids=lambda vector: vector["key"])
+def test_redacts_every_key_vector_exactly_as_the_server_does(vector):
+    scrubbed = pii_scrubber.scrub({vector["key"]: "x"})
+
+    assert (scrubbed[vector["key"]] == pii_scrubber.REDACTED) is vector["redacted"]
 
 
 def test_redacts_an_email_address_embedded_in_free_text():

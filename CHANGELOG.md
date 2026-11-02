@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.22.1 (2026-11-02)
+
+- README only, no code changes. The strict privacy section now says the message fingerprint also takes out
+  emails and quoted values, as it has since 0.21.0.
+
 ## 0.22.0 (2026-10-23)
 
 - PII scrubbing catches card numbers however they're grouped (bare, 4-4-4-4, Amex's 4-6-5, or next to a

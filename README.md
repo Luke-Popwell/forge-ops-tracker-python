@@ -284,7 +284,7 @@ trace id, and the database tables or procedures involved), never free text that 
 name, an email or a diagnosis:
 
 - No error message. A `message_fingerprint` is sent instead: a one-way hash of the message with
-  its numbers, hex ids and UUIDs taken out, computed in your process, so errors still group
+  its emails, quoted values, numbers, hex ids and UUIDs taken out, computed in your process, so errors still group
   without the message ever leaving it.
 - No breadcrumbs (they aren't recorded at all), no `endpoint`, no SQL statement even with
   `capture_sql_statement=True`, and no source context (the source file is never read).
